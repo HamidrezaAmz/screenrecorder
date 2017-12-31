@@ -55,13 +55,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import ly.count.android.sdk.Countly;
-import ly.count.android.sdk.DeviceId;
-
 public class MainActivity extends AppCompatActivity {
 
     private PermissionResultListener mPermissionResultListener;
-    private AnalyticsSettingsListerner analyticsSettingsListerner;
     private MediaProjection mMediaProjection;
     private MediaProjectionManager mProjectionManager;
     private FloatingActionButton fab;
@@ -80,31 +76,31 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        String theme = PreferenceManager.getDefaultSharedPreferences(this)
-                .getString(getString(R.string.preference_theme_key), Const.PREFS_LIGHT_THEME);
-        int popupOverlayTheme = 0;
-        int toolBarColor = 0;
-        switch (theme){
-            case Const.PREFS_DARK_THEME:
-                setTheme(R.style.AppTheme_Dark_NoActionBar);
-                popupOverlayTheme = R.style.AppTheme_PopupOverlay_Dark;
-                toolBarColor = ContextCompat.getColor(this, R.color.colorPrimary_dark);
-                break;
-            case Const.PREFS_BLACK_THEME:
-                setTheme(R.style.AppTheme_Black_NoActionBar);
-                popupOverlayTheme = R.style.AppTheme_PopupOverlay_Black;
-                toolBarColor = ContextCompat.getColor(this, R.color.colorPrimary_black);
-                break;
-        }
+        //        String theme = PreferenceManager.getDefaultSharedPreferences(this)
+//                .getString(getString(R.string.preference_theme_key), Const.PREFS_LIGHT_THEME);
+//        int popupOverlayTheme = 0;
+//        int toolBarColor = 0;
+//        switch (theme) {
+//            case Const.PREFS_DARK_THEME:
+//                setTheme(R.style.AppTheme_Dark_NoActionBar);
+//                popupOverlayTheme = R.style.AppTheme_PopupOverlay_Dark;
+//                toolBarColor = ContextCompat.getColor(this, R.color.colorPrimary_dark);
+//                break;
+//            case Const.PREFS_BLACK_THEME:
+//                setTheme(R.style.AppTheme_Black_NoActionBar);
+//                popupOverlayTheme = R.style.AppTheme_PopupOverlay_Black;
+//                toolBarColor = ContextCompat.getColor(this, R.color.colorPrimary_black);
+//                break;
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(toolBarColor);
-
-        if (popupOverlayTheme != 0)
-            toolbar.setPopupTheme(popupOverlayTheme);
+//        toolbar.setBackgroundColor(toolBarColor);
+//
+//        if (popupOverlayTheme != 0)
+//            toolbar.setPopupTheme(popupOverlayTheme);
 
         setSupportActionBar(toolbar);
 
@@ -113,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setBackgroundColor(toolBarColor);
+//        tabLayout.setBackgroundColor(toolBarColor);
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -154,30 +150,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    public void setupAnalytics() {
-        if (!prefs.getBoolean(getString(R.string.preference_crash_reporting_key), false) &&
-                !prefs.getBoolean(getString(R.string.preference_anonymous_statistics_key), false)) {
-            Log.d(Const.TAG, "Analytics disabled by user");
-            return;
-        }
-        Countly.sharedInstance().init(this, Const.ANALYTICS_URL, Const.ANALYTICS_API_KEY,
-                null, DeviceId.Type.OPEN_UDID, 3, null, null, null, null);
-        Countly.sharedInstance().setHttpPostForced(true);
-        Countly.sharedInstance().enableParameterTamperingProtection(getPackageName());
-
-        if (prefs.getBoolean(getString(R.string.preference_crash_reporting_key), false)) {
-            Countly.sharedInstance().enableCrashReporting();
-            Log.d(Const.TAG, "Enabling crash reporting");
-        }
-        if (prefs.getBoolean(getString(R.string.preference_anonymous_statistics_key), false)) {
-            Countly.sharedInstance().setStarRatingDisableAskingForEachAppVersion(false);
-            Countly.sharedInstance().setViewTracking(true);
-            Countly.sharedInstance().setIfStarRatingShownAutomatically(true);
-            Log.d(Const.TAG, "Enabling countly statistics");
-        }
-        Countly.sharedInstance().onStart(this);
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -350,77 +322,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    private void requestAnalyticsPermission() {
-        if (!prefs.getBoolean(Const.PREFS_REQUEST_ANALYTICS_PERMISSION, true))
-            return;
-
-        new AlertDialog.Builder(this)
-                .setTitle("Allow anonymous analytics")
-                .setMessage("Do you want to allow anonymous crash reporting and usage metrics now?" +
-                        "\nRead the privacy policy to know more on what data are collected")
-                .setPositiveButton("Enable analytics", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        analyticsSettingsListerner.updateAnalyticsSettings(Const.analytics.CRASHREPORTING);
-                        analyticsSettingsListerner.updateAnalyticsSettings(Const.analytics.USAGESTATS);
-                        prefs.edit()
-                                .putBoolean(Const.PREFS_REQUEST_ANALYTICS_PERMISSION, false)
-                                .apply();
-                    }
-                })
-                .setNeutralButton("Enable Crash reporting only", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        analyticsSettingsListerner.updateAnalyticsSettings(Const.analytics.CRASHREPORTING);
-                        prefs.edit()
-                                .putBoolean(Const.PREFS_REQUEST_ANALYTICS_PERMISSION, false)
-                                .apply();
-                    }
-                })
-                .setNegativeButton("Disable everything", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        prefs.edit()
-                                .putBoolean(Const.PREFS_REQUEST_ANALYTICS_PERMISSION, false)
-                                .apply();
-                    }
-                })
-                .setCancelable(false)
-                .create().show();
-    }
-
     //Set the callback interface for permission result from SettingsPreferenceFragment
     public void setPermissionResultListener(PermissionResultListener mPermissionResultListener) {
         this.mPermissionResultListener = mPermissionResultListener;
-    }
-
-    public void setAnalyticsSettingsListerner(AnalyticsSettingsListerner analyticsSettingsListerner) {
-        this.analyticsSettingsListerner = analyticsSettingsListerner;
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        /* Enable analytics only for release builds */
-        if (!BuildConfig.DEBUG) {
-            Log.d(Const.TAG, "Is a release build. Setting up analytics");
-            requestAnalyticsPermission();
-            setupAnalytics();
-        } else {
-            Log.d(Const.TAG, "Debug build. Analytics is disabled");
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        if (!BuildConfig.DEBUG) {
-            if (Countly.sharedInstance().hasBeenCalledOnStart()) {
-                Countly.sharedInstance().onStop();
-                Log.d(Const.TAG, "Countly stopped");
-            }
-        }
-        super.onStop();
     }
 
     @Override

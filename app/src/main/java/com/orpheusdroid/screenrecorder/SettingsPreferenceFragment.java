@@ -75,8 +75,6 @@ public class SettingsPreferenceFragment extends PreferenceFragment implements Sh
         //init permission listener callback
         setPermissionListener();
 
-        setAnalyticsPermissionListerner();
-
         //Get Default save location from shared preference
         String defaultSaveLoc = (new File(Environment
                 .getExternalStorageDirectory() + File.separator + Const.APPDIR)).getPath();
@@ -117,7 +115,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment implements Sh
         if (floatingControl.isChecked())
             requestSystemWindowsPermission();
 
-        if(touchPointer.isChecked()){
+        if (touchPointer.isChecked()) {
             if (!hasPluginInstalled())
                 touchPointer.setChecked(false);
         }
@@ -159,13 +157,6 @@ public class SettingsPreferenceFragment extends PreferenceFragment implements Sh
         if (getActivity() != null && getActivity() instanceof MainActivity) {
             activity = (MainActivity) getActivity();
             activity.setPermissionResultListener(this);
-        }
-    }
-
-    private void setAnalyticsPermissionListerner(){
-        if (getActivity() != null && getActivity() instanceof MainActivity) {
-            activity = (MainActivity) getActivity();
-            activity.setAnalyticsSettingsListerner(this);
         }
     }
 
@@ -233,21 +224,11 @@ public class SettingsPreferenceFragment extends PreferenceFragment implements Sh
                 requestSystemWindowsPermission();
                 break;
             case R.string.preference_show_touch_title:
-                CheckBoxPreference showTouchCB = (CheckBoxPreference)pref;
-                if (showTouchCB.isChecked() && !hasPluginInstalled()){
+                CheckBoxPreference showTouchCB = (CheckBoxPreference) pref;
+                if (showTouchCB.isChecked() && !hasPluginInstalled()) {
                     showTouchCB.setChecked(false);
                     showDownloadAlert();
                 }
-                break;
-            case R.string.preference_crash_reporting_title:
-                CheckBoxPreference crashReporting = (CheckBoxPreference)pref;
-                CheckBoxPreference anonymousStats = (CheckBoxPreference) findPreference(getString(R.string.preference_anonymous_statistics_key));
-                if(!crashReporting.isChecked())
-                    anonymousStats.setChecked(false);
-                startAnalytics();
-                break;
-            case R.string.preference_anonymous_statistics_title:
-                startAnalytics();
                 break;
             case R.string.preference_theme_title:
                 activity.recreate();
@@ -278,10 +259,10 @@ public class SettingsPreferenceFragment extends PreferenceFragment implements Sh
                 .create().show();
     }
 
-    private boolean hasPluginInstalled(){
+    private boolean hasPluginInstalled() {
         PackageManager pm = getActivity().getPackageManager();
         try {
-            pm.getPackageInfo("com.orpheusdroid.screencamplugin",PackageManager.GET_META_DATA);
+            pm.getPackageInfo("com.orpheusdroid.screencamplugin", PackageManager.GET_META_DATA);
         } catch (PackageManager.NameNotFoundException e) {
             Log.d(Const.TAG, "Plugin not installed");
             return false;
@@ -317,21 +298,21 @@ public class SettingsPreferenceFragment extends PreferenceFragment implements Sh
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (activity != null){
+                        if (activity != null) {
                             activity.requestPermissionStorage();
                         }
                     }
                 }).show();
     }
 
-    private void showPermissionDeniedDialog(){
+    private void showPermissionDeniedDialog() {
         new AlertDialog.Builder(activity)
                 .setTitle(R.string.alert_permission_denied_title)
                 .setMessage(R.string.alert_permission_denied_message)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (activity != null){
+                        if (activity != null) {
                             activity.requestPermissionStorage();
                         }
                     }
@@ -356,7 +337,7 @@ public class SettingsPreferenceFragment extends PreferenceFragment implements Sh
                     Log.d(Const.TAG, "Storage permission denied. Requesting again");
                     dirChooser.setEnabled(false);
                     showPermissionDeniedDialog();
-                } else if((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)){
+                } else if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     dirChooser.setEnabled(true);
                 }
                 return;
@@ -392,19 +373,13 @@ public class SettingsPreferenceFragment extends PreferenceFragment implements Sh
 
     @Override
     public void updateAnalyticsSettings(Const.analytics analytics) {
-        switch (analytics){
+        switch (analytics) {
             case CRASHREPORTING:
                 crashReporting.setChecked(true);
                 break;
             case USAGESTATS:
                 usageStats.setChecked(true);
                 break;
-        }
-    }
-
-    private void startAnalytics(){
-        if (getActivity() != null && getActivity() instanceof MainActivity) {
-            ((MainActivity) getActivity()).setupAnalytics();
         }
     }
 }
