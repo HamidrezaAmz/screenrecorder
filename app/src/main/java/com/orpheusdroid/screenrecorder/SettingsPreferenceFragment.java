@@ -51,8 +51,11 @@ import java.util.Arrays;
  * Created by vijai on 11-10-2016.
  */
 
-public class SettingsPreferenceFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener
-        , PermissionResultListener, OnDirectorySelectedListerner, MainActivity.AnalyticsSettingsListerner {
+public class SettingsPreferenceFragment
+        extends PreferenceFragment
+        implements SharedPreferences.OnSharedPreferenceChangeListener,
+        PermissionResultListener,
+        OnDirectorySelectedListerner {
 
     SharedPreferences prefs;
     private CheckBoxPreference recaudio;
@@ -367,19 +370,19 @@ public class SettingsPreferenceFragment extends PreferenceFragment implements Sh
     public void onDirectorySelected() {
         Log.d(Const.TAG, "In settings fragment");
         if (getActivity() != null && getActivity() instanceof MainActivity) {
-            ((MainActivity) getActivity()).onDirectoryChanged();
+//            ((MainActivity) getActivity()).onDirectoryChanged();
         }
     }
 
-    @Override
-    public void updateAnalyticsSettings(Const.analytics analytics) {
-        switch (analytics) {
-            case CRASHREPORTING:
-                crashReporting.setChecked(true);
-                break;
-            case USAGESTATS:
-                usageStats.setChecked(true);
-                break;
-        }
-    }
+    //    @Override
+//    public void updateAnalyticsSettings(Const.analytics analytics) {
+//        switch (analytics) {
+//            case CRASHREPORTING:
+//                crashReporting.setChecked(true);
+//                break;
+//            case USAGESTATS:
+//                usageStats.setChecked(true);
+//                break;
+//        }
+//    }
 }
