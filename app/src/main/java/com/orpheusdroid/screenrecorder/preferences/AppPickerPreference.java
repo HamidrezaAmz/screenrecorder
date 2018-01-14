@@ -17,6 +17,7 @@
 
 package com.orpheusdroid.screenrecorder.preferences;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -29,9 +30,11 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.orpheusdroid.screenrecorder.Const;
 import com.orpheusdroid.screenrecorder.R;
+import com.orpheusdroid.screenrecorder.Utils.PublicFunction;
 import com.orpheusdroid.screenrecorder.adapter.Apps;
 import com.orpheusdroid.screenrecorder.adapter.AppsListFragmentAdapter;
 
@@ -44,12 +47,15 @@ import java.util.List;
  */
 
 public class AppPickerPreference extends DialogPreference implements AppsListFragmentAdapter.OnItemClicked {
+
+    private Context context;
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
     private ArrayList<Apps> apps;
 
     public AppPickerPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
         setPersistent(true);
 
         //set custom dialog layout
@@ -158,5 +164,19 @@ public class AppPickerPreference extends DialogPreference implements AppsListFra
             }
             return apps;
         }
+    }
+
+    @SuppressLint("NewApi")
+    @Override
+    protected void onBindView(View view) {
+        super.onBindView(view);
+        TextView titleView = (TextView) view.findViewById(android.R.id.title);
+        TextView subtitleView = (TextView) view.findViewById(android.R.id.summary);
+
+        titleView.setTypeface(PublicFunction.getTypeface());
+        titleView.setTextColor(context.getColor(R.color.white));
+
+        subtitleView.setTypeface(PublicFunction.getTypeface());
+        subtitleView.setTextColor(context.getColor(R.color.gray));
     }
 }

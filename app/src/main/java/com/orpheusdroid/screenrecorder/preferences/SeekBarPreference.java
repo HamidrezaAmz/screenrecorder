@@ -17,6 +17,7 @@
 
 package com.orpheusdroid.screenrecorder.preferences;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.preference.DialogPreference;
@@ -31,14 +32,16 @@ import android.widget.TextView;
 
 import com.orpheusdroid.screenrecorder.Const;
 import com.orpheusdroid.screenrecorder.R;
+import com.orpheusdroid.screenrecorder.Utils.PublicFunction;
 
 /**
  * Created by vijai on 04-04-2017.
  */
 
 public class SeekBarPreference extends DialogPreference implements SeekBar.OnSeekBarChangeListener {
-    private static final String androidns="http://schemas.android.com/apk/res/android";
+    private static final String androidns = "http://schemas.android.com/apk/res/android";
 
+    private Context context;
     private SeekBar mSeekBar;
     private TextView mValueText;
     private ImageView mFloatingTogglePreview;
@@ -51,7 +54,8 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
     private ViewGroup.LayoutParams mIV_pararams;
 
     public SeekBarPreference(Context context, AttributeSet attrs) {
-        super(context,attrs);
+        super(context, attrs);
+        this.context = context;
 
         //Set the preferenceto be persistent
         setPersistent(true);
@@ -60,12 +64,12 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
         setDialogLayoutResource(R.layout.layout_floating_control_preview);
 
         //Get default values from xml
-        mSuffix = attrs.getAttributeValue(androidns,"text");
-        mDefault = attrs.getAttributeIntValue(androidns,"defaultValue", 100);
-        mMax = attrs.getAttributeIntValue(androidns,"max", 200);
+        mSuffix = attrs.getAttributeValue(androidns, "text");
+        mDefault = attrs.getAttributeIntValue(androidns, "defaultValue", 100);
+        mMax = attrs.getAttributeIntValue(androidns, "max", 200);
     }
 
-    private void init(){
+    private void init() {
         mSeekBar.setOnSeekBarChangeListener(this);
 
         //Get the default layout params of the image view to change layout parameters later
@@ -96,24 +100,22 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
     }
 
     @Override
-    protected void onSetInitialValue(boolean restore, Object defaultValue)
-    {
+    protected void onSetInitialValue(boolean restore, Object defaultValue) {
         super.onSetInitialValue(restore, defaultValue);
         if (restore)
             mValue = shouldPersist() ? getPersistedInt(mDefault) : 100;
         else
-            mValue = (Integer)defaultValue;
+            mValue = (Integer) defaultValue;
     }
 
-    public void onProgressChanged(SeekBar seek, int value, boolean fromTouch)
-    {
+    public void onProgressChanged(SeekBar seek, int value, boolean fromTouch) {
         //Set the min value of seekbar to 70.
         if (value < 70)
             mValueText.setTextColor(Color.RED);
         else
             mValueText.setTextColor(defaultColor);
 
-        if (value < 25){
+        if (value < 25) {
             mSeekBar.setProgress(25);
             return;
         }
@@ -130,11 +132,15 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
             persistInt(value);
         callChangeListener(value);
     }
-    public void onStartTrackingTouch(SeekBar seek) {}
-    public void onStopTrackingTouch(SeekBar seek) {}
+
+    public void onStartTrackingTouch(SeekBar seek) {
+    }
+
+    public void onStopTrackingTouch(SeekBar seek) {
+    }
 
     //Method to generate updated LayoutParams from default LayoutParams
-    private ViewGroup.LayoutParams generateLayoutParams(int value){
+    private ViewGroup.LayoutParams generateLayoutParams(int value) {
         int px = dpToPx(value);
         mIV_pararams.height = px;
         mIV_pararams.width = px;
@@ -146,5 +152,19 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
     private int dpToPx(int dp) {
         DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
         return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+    }
+
+    @SuppressLint("NewApi")
+    @Override
+    protected void onBindView(View view) {
+        super.onBindView(view);
+        TextView titleView = (TextView) view.findViewById(android.R.id.title);
+        TextView subtitleView = (TextView) view.findViewById(android.R.id.summary);
+
+        titleView.setTypeface(PublicFunction.getTypeface());
+        titleView.setTextColor(context.getColor(R.color.white));
+
+        subtitleView.setTypeface(PublicFunction.getTypeface());
+        subtitleView.setTextColor(context.getColor(R.color.gray));
     }
 }

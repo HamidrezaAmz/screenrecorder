@@ -1,20 +1,3 @@
-/*
- * Copyright (c) 2016. Vijai Chandra Prasad R.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see http://www.gnu.org/licenses
- */
-
 package com.orpheusdroid.screenrecorder;
 
 import android.app.AlertDialog;
@@ -40,7 +23,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.orpheusdroid.screenrecorder.folderpicker.FolderChooser;
+import com.orpheusdroid.screenrecorder.Utils.MyPreferences;
 import com.orpheusdroid.screenrecorder.folderpicker.OnDirectorySelectedListerner;
 
 import java.io.File;
@@ -60,10 +43,8 @@ public class SettingsPreferenceFragment
     SharedPreferences prefs;
     private CheckBoxPreference recaudio;
     private CheckBoxPreference floatingControl;
-    private CheckBoxPreference crashReporting;
     private CheckBoxPreference usageStats;
-    private FolderChooser dirChooser;
-    private MainActivity activity;
+    private ScreenRecorderActivity activity;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -73,7 +54,7 @@ public class SettingsPreferenceFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.settings);
+        addPreferencesFromResource(R.xml.screen_recorder_settings);
 
         //init permission listener callback
         setPermissionListener();
@@ -81,6 +62,7 @@ public class SettingsPreferenceFragment
         //Get Default save location from shared preference
         String defaultSaveLoc = (new File(Environment
                 .getExternalStorageDirectory() + File.separator + Const.APPDIR)).getPath();
+        MyPreferences.writeString(getActivity(), MyPreferences.KEY_SAVE_LOCATION, defaultSaveLoc);
 
         //Get instances of all preferences
         prefs = getPreferenceScreen().getSharedPreferences();
@@ -90,41 +72,34 @@ public class SettingsPreferenceFragment
         recaudio = (CheckBoxPreference) findPreference(getString(R.string.audiorec_key));
         ListPreference filenameFormat = (ListPreference) findPreference(getString(R.string.filename_key));
         EditTextPreference filenamePrefix = (EditTextPreference) findPreference(getString(R.string.fileprefix_key));
-        dirChooser = (FolderChooser) findPreference(getString(R.string.savelocation_key));
         floatingControl = (CheckBoxPreference) findPreference(getString(R.string.preference_floating_control_key));
         CheckBoxPreference touchPointer = (CheckBoxPreference) findPreference("touch_pointer");
-        crashReporting = (CheckBoxPreference) findPreference(getString(R.string.preference_crash_reporting_key));
         usageStats = (CheckBoxPreference) findPreference(getString(R.string.preference_anonymous_statistics_key));
-        //Set previously chosen directory as initial directory
-        dirChooser.setCurrentDir(getValue(getString(R.string.savelocation_key), defaultSaveLoc));
 
-        ListPreference theme = (ListPreference) findPreference(getString(R.string.preference_theme_key));
-        theme.setSummary(theme.getEntry());
-
-        //Set the summary of preferences dynamically with user choice or default if no user choice is made
+        // Set the summary of preferences dynamically with user choice or default if no user choice is made
         updateResolution(res);
         fps.setSummary(getValue(getString(R.string.fps_key), "30"));
         float bps = bitsToMb(Integer.parseInt(getValue(getString(R.string.bitrate_key), "7130317")));
         bitrate.setSummary(bps + " Mbps");
-        dirChooser.setSummary(getValue(getString(R.string.savelocation_key), defaultSaveLoc));
+        // dirChooser.setSummary(getValue(getString(R.string.savelocation_key), defaultSaveLoc));
         filenameFormat.setSummary(getFileSaveFormat());
         filenamePrefix.setSummary(getValue(getString(R.string.fileprefix_key), "recording"));
 
-        //If record audio checkbox is checked, check for record audio permission
+        // If record audio checkbox is checked, check for record audio permission
         if (recaudio.isChecked())
             requestAudioPermission();
 
-        //If floating controls is checked, check for system windows permission
+        // If floating controls is checked, check for system windows permission
         if (floatingControl.isChecked())
             requestSystemWindowsPermission();
 
-        if (touchPointer.isChecked()) {
-            if (!hasPluginInstalled())
-                touchPointer.setChecked(false);
-        }
+        //        if (touchPointer.isChecked()) {
+//            if (!hasPluginInstalled())
+//                touchPointer.setChecked(false);
+//        }
 
         //set callback for directory change
-        dirChooser.setOnDirectoryClickedListerner(this);
+//        dirChooser.setOnDirectoryClickedListerner(this);
     }
 
     private void updateResolution(ListPreference res) {
@@ -155,10 +130,10 @@ public class SettingsPreferenceFragment
             return res;
     }
 
-    //Set permissionListener in MainActivity
+    //Set permissionListener in ScreenRecorderActivity
     private void setPermissionListener() {
-        if (getActivity() != null && getActivity() instanceof MainActivity) {
-            activity = (MainActivity) getActivity();
+        if (getActivity() != null && getActivity() instanceof ScreenRecorderActivity) {
+            activity = (ScreenRecorderActivity) getActivity();
             activity.setPermissionResultListener(this);
         }
     }
@@ -338,10 +313,10 @@ public class SettingsPreferenceFragment
             case Const.EXTDIR_REQUEST_CODE:
                 if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_DENIED)) {
                     Log.d(Const.TAG, "Storage permission denied. Requesting again");
-                    dirChooser.setEnabled(false);
+//                    dirChooser.setEnabled(false);
                     showPermissionDeniedDialog();
                 } else if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                    dirChooser.setEnabled(true);
+//                    dirChooser.setEnabled(true);
                 }
                 return;
             case Const.AUDIO_REQUEST_CODE:
@@ -368,9 +343,9 @@ public class SettingsPreferenceFragment
 
     @Override
     public void onDirectorySelected() {
-        Log.d(Const.TAG, "In settings fragment");
-        if (getActivity() != null && getActivity() instanceof MainActivity) {
-//            ((MainActivity) getActivity()).onDirectoryChanged();
+        Log.d(Const.TAG, "In screen_recorder_settings fragment");
+        if (getActivity() != null && getActivity() instanceof ScreenRecorderActivity) {
+        // ((ScreenRecorderActivity) getActivity()).onDirectoryChanged();
         }
     }
 

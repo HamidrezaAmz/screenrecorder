@@ -8,6 +8,8 @@
     <color name="colorAccent">#FF5722</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="gray">#afadad</color>
 
     <!-- Dark theme color resources -->
     <color name="colorPrimary_dark">#202020</color>
@@ -15,6 +17,7 @@
     <color name="textColorPrimary_dark">@android:color/white</color>
     <color name="textColorSecondary_dark">#fafafa</color>
     <color name="colorAccent_dark">#009688</color>
+    <color name="colorAccent_light">#02d6c3</color>
     <color name="windowBackground_dark">#212121</color>
     <color name="navigationBarColor_dark">@android:color/black</color>
     <color name="actionBarStyle_dark">@android:color/black</color>

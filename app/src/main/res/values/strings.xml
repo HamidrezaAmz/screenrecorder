@@ -1,13 +1,33 @@
 <resources>
+
+    <!--my string-->
+    <string name="prefs_category_video_settings_title">تنظیمات ویدیو</string>
+    <string name="prefs_category_audio_settings_title">تنظیمات صدا</string>
+    <string name="prefs_category_save_options_title">تنظیمات ذخیره سازی</string>
+    <string name="prefs_category_recording_settings_title">تنظیمات ضبط ویدیو</string>
+    <string name="preference_resolution_title">وضوح تصویر</string>
+    <string name="preference_fps_title">فریم در ثانیه</string>
+    <string name="preference_bit_title">نرخ بیت</string>
+    <string name="preference_audio_record_title">ضبط صدا</string>
+    <string name="preference_audio_record_summary">ضبط صدا از میکروفون همراه با ضبط صفحه نمایش</string>
+    <string name="preference_filename_format_title">فرمت نام گذاری</string>
+    <string name="preference_filename_prefix_title">پیشوند نام فایل</string>
+    <string name="preference_floating_control_title">استفاده از کنترل شناور</string>
+    <string name="preference_floating_control_summary">فعال / غیر فعال کردن کنترل های شناور که بر روی هر صفحه نمایش ترسیم می شود</string>
+    <string name="preference_floating_control_size_title">اندازه آیکون کنترل شناور</string>
+    <string name="preference_floating_control_size_summary">اندازه آیکون کنترل شناور روی صفحه را تنظیم کنید</string>
+    <string name="preference_show_touch_title">نمایش لمس صفحه نمایش</string>
+    <string name="preference_show_touch_summary">فعال / غیرفعال کردن لمس صفحه نمایش</string>
+    <string name="preference_enable_target_app_title">برنامه هدف را فعال کنید</string>
+    <string name="preference_enable_target_app_summary">شما می تونید قبل از ضبط، انتخاب کنید که برنامه مورد نظرتون باز بشه</string>
+    <string name="preference_app_chooser_title">برنامه را انتخاب کنید</string>
+    <string name="preference_app_chooser_summary">یک برنامه را انتخاب کنید تا به طور پیشفرض در هنگام ضبط اجرا شود</string>
+
+    <!--App string-->
     <string name="app_name" translatable="false">ScreenCam</string>
-    <string name="preference_resolution_title">Resolution</string>
     <string name="preference_resolution_summary">Select the resolution to record at</string>
-    <string name="preference_fps_title">Frames per second</string>
     <string name="preference_fps_summary">Choose fps to record at</string>
-    <string name="preference_bit_title">Bit rate</string>
     <string name="preference_bit_summary">Choose bit rate</string>
-    <string name="preference_audio_record_title">Record audio</string>
-    <string name="preference_audio_record_summary">Records audio from mic along with screen video</string>
     <string name="preference_save_location_title">Save location</string>
     <string name="res_key" translatable="false">resolution</string>
     <string name="fps_key" translatable="false">fps</string>
@@ -15,9 +35,7 @@
     <string name="audiorec_key" translatable="false">audiorec</string>
     <string name="savelocation_key" translatable="false">savelocation</string>
     <string name="filename_key" translatable="false">filename</string>
-    <string name="preference_filename_format_title">File name format</string>
     <string name="fileprefix_key" translatable="false">fileprefix</string>
-    <string name="preference_filename_prefix_title">File name prefix</string>
     <string name="storage_permission_request_title">Allow Storage Permission</string>
     <string name="storage_permission_request_summary">Write permission to storage is required to save the recorded video.</string>
     <string name="ok">OK</string>
@@ -56,8 +74,6 @@
     <string name="share_intent_notification_title">Share recorded video</string>
     <string name="share_intent_notification_content">click to share the recorded video</string>
     <string name="share_intent_notification_action_text">Share</string>
-    <string name="preference_floating_control_title">Use Floating Controls</string>
-    <string name="preference_floating_control_summary">Enable/Disable floating controls which draws over every screen</string>
     <string name="preference_floating_control_key" translatable="false">floating_controls</string>
     <string name="tab_settings_title">Settings</string>
     <string name="tab_videos_title">Videos</string>
@@ -65,13 +81,8 @@
     <string name="video_list_no_video_message">No videos available</string>
     <string name="alert_title_create_folder">Create Folder</string>
     <string name="alert_message_create_folder">Enter folder name</string>
-    <string name="prefs_category_video_settings_title">Video settings</string>
-    <string name="prefs_category_audio_settings_title">Audio settings</string>
-    <string name="prefs_category_save_options_title">Save options</string>
-    <string name="prefs_category_recording_settings_title">Recording Settings</string>
+
     <string name="menu_privacy_policy">Privacy Policy</string>
-    <string name="preference_show_touch_title">Show touches</string>
-    <string name="preference_show_touch_summary">Enable/disable touch</string>
     <string name="preference_show_touch_key" translatable="false">touch_pointer</string>
     <string name="alert_plugin_not_found_title">Plugin not found</string>
     <string name="alert_plugin_not_found_message">Plugin is required to show touches. Do you want to buy it now?</string>
@@ -85,8 +96,6 @@
     <string name="preference_anonymous_statistics_title">Anonymous statistics</string>
     <string name="preference_anonymous_statistics_summary">Enable anonymous statistics on number of app usages</string>
     <string name="preference_anonymous_statistics_key" translatable="false">usage_statistics</string>
-    <string name="preference_floating_control_size_title">Floating controls icon size</string>
-    <string name="preference_floating_control_size_summary">Set the icon size of on-screen floating control</string>
     <string name="preference_floating_control_size_key" translatable="false">floatingControlSize</string>
     <string name="storage_selection_spinner_title">Select storage</string>
     <string name="external_storage_dir_not_writable">The directory is not writable</string>
@@ -104,11 +113,7 @@
     <string name="preference_theme_key" translatable="false">theme</string>
     <string name="prefs_category_theme_title">Theme</string>
     <string name="preference_theme_title">Choose Theme</string>
-    <string name="preference_enable_target_app_title">Enable target app</string>
-    <string name="preference_enable_target_app_summary">Open target app before recording</string>
     <string name="preference_enable_target_app_key" translatable="false">enable_app_target</string>
-    <string name="preference_app_chooser_title">Choose App</string>
-    <string name="preference_app_chooser_summary">Choose an app to start by default while recording</string>
     <string name="preference_app_chooser_key" translatable="false">app_chosen</string>
     <plurals name="delete_alert_title">
         <item quantity="zero">Delete video?</item>

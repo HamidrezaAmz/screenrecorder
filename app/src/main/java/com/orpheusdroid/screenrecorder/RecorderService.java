@@ -45,8 +45,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -58,7 +56,7 @@ import android.view.Surface;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.orpheusdroid.screenrecorder.gesture.ShakeEventManager;
+import com.orpheusdroid.screenrecorder.Utils.MyPreferences;
 
 import java.io.File;
 import java.io.IOException;
@@ -72,7 +70,7 @@ import java.util.List;
  * Created by vijai on 12-10-2016.
  */
 //TODO: Update icons for notifcation
-public class RecorderService extends Service implements ShakeEventManager.ShakeListener {
+public class RecorderService extends Service {
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     private static int WIDTH, HEIGHT, FPS, DENSITY_DPI;
     private static int BITRATE;
@@ -84,7 +82,6 @@ public class RecorderService extends Service implements ShakeEventManager.ShakeL
     private FloatingControlService floatingControlService;
     private boolean isBound = false;
     private NotificationManager mNotificationManager;
-    private ShakeEventManager mShakeDetector;
     private Intent data;
     private int result;
 
@@ -148,35 +145,7 @@ public class RecorderService extends Service implements ShakeEventManager.ShakeL
 
                     boolean isShakeGestureActive = prefs.getBoolean(getString(R.string.preference_shake_gesture_key), false);
 
-                    if (isShakeGestureActive) {
-                        //SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-                        mShakeDetector = new ShakeEventManager(this);
-                        mShakeDetector.init(this);
-
-                        Bitmap icon = BitmapFactory.decodeResource(getResources(),
-                                R.mipmap.ic_launcher);
-
-                        Intent destroyMediaRecorderIntent = new Intent(this, RecorderService.class);
-                        destroyMediaRecorderIntent.setAction(Const.SCREEN_RECORDING_DESTORY_SHAKE_GESTURE);
-                        PendingIntent pdestroyMediaRecorderIntent = PendingIntent.getService(this, 0, destroyMediaRecorderIntent, 0);
-
-                        NotificationCompat.Builder shakeGestureWaitNotification =
-                                new NotificationCompat.Builder(this, Const.RECORDING_NOTIFICATION_CHANNEL_ID)
-                                        .setContentTitle("Waiting for device shake")
-                                        .setContentText("Shake your device to start recording or press this notification to cancel")
-                                        .setOngoing(true)
-                                        .setSmallIcon(R.drawable.ic_notification)
-                                        .setLargeIcon(
-                                                Bitmap.createScaledBitmap(icon, 128, 128, false))
-                                        .setContentIntent(pdestroyMediaRecorderIntent);
-
-                        startNotificationForeGround(shakeGestureWaitNotification.build(), Const.SCREEN_RECORDER_SHARE_NOTIFICATION_ID);
-
-                        Toast.makeText(this, R.string.screenrecording_waiting_for_gesture_toast,
-                                Toast.LENGTH_LONG).show();
-                    } else {
-                        startRecording();
-                    }
+                    startRecording();
 
                 } else {
                     Toast.makeText(this, R.string.screenrecording_already_active_toast, Toast.LENGTH_SHORT).show();
@@ -206,10 +175,6 @@ public class RecorderService extends Service implements ShakeEventManager.ShakeL
 
                 //The service is started as foreground service and hence has to be stopped
                 stopForeground(true);
-                break;
-            case Const.SCREEN_RECORDING_DESTORY_SHAKE_GESTURE:
-                mShakeDetector.stop();
-                stopSelf();
                 break;
         }
         return START_STICKY;
@@ -349,7 +314,7 @@ public class RecorderService extends Service implements ShakeEventManager.ShakeL
 
     //Virtual display created by mirroring the actual physical display
     private VirtualDisplay createVirtualDisplay() {
-        return mMediaProjection.createVirtualDisplay("MainActivity",
+        return mMediaProjection.createVirtualDisplay("ScreenRecorderActivity",
                 WIDTH, HEIGHT, DENSITY_DPI,
                 DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
                 mMediaRecorder.getSurface(), null /*Callbacks*/, null
@@ -421,7 +386,7 @@ public class RecorderService extends Service implements ShakeEventManager.ShakeL
         recordStopIntent.setAction(Const.SCREEN_RECORDING_STOP);
         PendingIntent precordStopIntent = PendingIntent.getService(this, 0, recordStopIntent, 0);
 
-        Intent UIIntent = new Intent(this, MainActivity.class);
+        Intent UIIntent = new Intent(this, ScreenRecorderActivity.class);
         PendingIntent notificationContentIntent = PendingIntent.getActivity(this, 0, UIIntent, 0);
 
         NotificationCompat.Builder notification = new NotificationCompat.Builder(this, Const.RECORDING_NOTIFICATION_CHANNEL_ID)
@@ -503,19 +468,29 @@ public class RecorderService extends Service implements ShakeEventManager.ShakeL
         return null;
     }
 
-    //Get user's choices for user choosable settings
+    //Get user's choices for user choosable screen_recorder_settings
     public void getValues() {
         String res = prefs.getString(getString(R.string.res_key), getResolution());
         setWidthHeight(res);
         FPS = Integer.parseInt(prefs.getString(getString(R.string.fps_key), "30"));
         BITRATE = Integer.parseInt(prefs.getString(getString(R.string.bitrate_key), "7130317"));
         mustRecAudio = prefs.getBoolean(getString(R.string.audiorec_key), false);
-        String saveLocation = prefs.getString(getString(R.string.savelocation_key),
-                Environment.getExternalStorageDirectory() + File.separator + Const.APPDIR);
+
+        /* Start location part */
+        /*String saveLocation = prefs.getString(getString(R.string.savelocation_key), Environment.getExternalStorageDirectory() + File.separator + Const.APPDIR);
+        String defaultSaveLoc = (new File(Environment
+                .getExternalStorageDirectory() + File.separator + Const.APPDIR)).getPath(); */
+
+        String saveLocation = MyPreferences.readString(getBaseContext(),
+                MyPreferences.KEY_SAVE_LOCATION,
+                (new File(Environment.getExternalStorageDirectory() + File.separator + Const.APPDIR)).getPath());
+
         File saveDir = new File(saveLocation);
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) && !saveDir.isDirectory()) {
             saveDir.mkdirs();
         }
+        /* End location part */
+
         useFloatingControls = prefs.getBoolean(getString(R.string.preference_floating_control_key), false);
         showTouches = prefs.getBoolean(getString(R.string.preference_show_touch_key), false);
         String saveFileName = getFileSaveName();
@@ -612,29 +587,6 @@ public class RecorderService extends Service implements ShakeEventManager.ShakeL
             return;
         }
         destroyMediaProjection();
-    }
-
-    @Override
-    public void onShake() {
-        if (!isRecording) {
-            Vibrator vibrate = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-
-            getManager().cancel(Const.SCREEN_RECORDER_WAITING_FOR_SHAKE_NOTIFICATION_ID);
-
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
-                vibrate.vibrate(500);
-            else
-                VibrationEffect.createOneShot(500, 255);
-
-            startRecording();
-            Toast.makeText(this, "Rec start", Toast.LENGTH_SHORT).show();
-        } else {
-            Intent recordStopIntent = new Intent(this, RecorderService.class);
-            recordStopIntent.setAction(Const.SCREEN_RECORDING_STOP);
-            startService(recordStopIntent);
-            Toast.makeText(this, "Rec stop", Toast.LENGTH_SHORT).show();
-            mShakeDetector.stop();
-        }
     }
 
     private class MediaProjectionCallback extends MediaProjection.Callback {

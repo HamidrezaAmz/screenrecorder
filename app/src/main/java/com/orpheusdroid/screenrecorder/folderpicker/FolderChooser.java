@@ -63,6 +63,7 @@ import java.util.List;
 
 public class FolderChooser extends DialogPreference implements View.OnClickListener,
         DirectoryRecyclerAdapter.OnDirectoryClickedListerner, AdapterView.OnItemSelectedListener {
+
     private RecyclerView rv;
     private TextView tv_currentDir;
     private TextView tv_empty;

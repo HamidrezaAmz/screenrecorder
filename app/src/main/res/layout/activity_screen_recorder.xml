@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context="com.orpheusdroid.screenrecorder.MainActivity">
+    tools:context="com.orpheusdroid.screenrecorder.ScreenRecorderActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -14,7 +14,7 @@
         android:layout_height="?attr/actionBarSize"
         android:layout_alignParentTop="true"
         android:background="?attr/colorPrimary"
-        app:popupTheme="@style/AppTheme.PopupOverlay.Light" />
+        app:popupTheme="@style/AppTheme.PopupOverlay.Dark" />
 
     <FrameLayout
         android:id="@+id/container_settings"

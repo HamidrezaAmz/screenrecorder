@@ -1,44 +1,4 @@
-<!--
-  ~ Copyright (c) 2016. Vijai Chandra Prasad R.
-  ~
-  ~ This program is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU General Public License as published by
-  ~ the Free Software Foundation, either version 3 of the License, or
-  ~ (at your option) any later version.
-  ~
-  ~ This program is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~ GNU General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU General Public License
-  ~ along with this program.  If not, see http://www.gnu.org/licenses
-  -->
-
 <resources>
-
-    <!-- Base application theme. -->
-    <style name="AppTheme.Light" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
-    <style name="AppTheme.Light.NoActionBar" parent="AppTheme.Light">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowContentTransitions">true</item>
-        <item name="android:windowAllowEnterTransitionOverlap">true</item>
-        <item name="android:windowAllowReturnTransitionOverlap">true</item>
-        <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
-        <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
-        <item name="selected_app_check">@drawable/ic_check_circle_black_18dp</item>
-        <item name="windowActionModeOverlay">true</item>
-        <item name="android:actionModeBackground">@color/colorPrimary</item>
-    </style>
-
-    <style name="AppTheme.PopupOverlay.Light" parent="ThemeOverlay.AppCompat.Light" />
 
     <!-- Base for dark themes (dark and black) -->
     <style name="AppTheme.Dark.Base" parent="Theme.AppCompat">
@@ -48,6 +8,8 @@
         <item name="android:actionBarStyle">@color/actionBarStyle_dark</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="selected_app_check">@drawable/ic_check_circle_white_18dp</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <!-- Dark theme -->
@@ -97,22 +59,5 @@
     <style name="AppTheme.Black.Dialog" parent="@android:style/Theme.Dialog">
         <item name="android:background">@color/popupBackground_black</item>
     </style>
-
-    <style name="AppTheme.Black.NoActionBar" parent="AppTheme.Black">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowContentTransitions">true</item>
-        <item name="android:windowAllowEnterTransitionOverlap">true</item>
-        <item name="android:windowAllowReturnTransitionOverlap">true</item>
-        <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
-        <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
-    </style>
-
-    <style name="AppTheme.PopupOverlay.Black" parent="ThemeOverlay.AppCompat.Dark" >
-        <item name="android:colorBackground">@color/popupBackground_black</item>
-    </style>
-
-    <!-- AppBarOverlay theme. Common to all theme -->
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
 </resources>

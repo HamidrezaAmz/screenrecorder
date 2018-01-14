@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2016. Vijai Chandra Prasad R.
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see http://www.gnu.org/licenses
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--Video setting-->
+    <com.orpheusdroid.screenrecorder.preferences.MyPreferenceCategory android:title="@string/prefs_category_video_settings_title">
+        <com.orpheusdroid.screenrecorder.preferences.MyListPreference
+            android:defaultValue="1440x2560"
+            android:entries="@array/resolutionValues"
+            android:entryValues="@array/resolutionValues"
+            android:key="@string/res_key"
+            android:summary="@string/preference_resolution_summary"
+            android:title="@string/preference_resolution_title" />
+
+        <com.orpheusdroid.screenrecorder.preferences.MyListPreference
+            android:defaultValue="30"
+            android:entries="@array/fpsArray"
+            android:entryValues="@array/fpsArray"
+            android:key="@string/fps_key"
+            android:summary="@string/preference_fps_summary"
+            android:title="@string/preference_fps_title" />
+
+        <com.orpheusdroid.screenrecorder.preferences.MyListPreference
+            android:defaultValue="7130317"
+            android:entries="@array/bitrateArray"
+            android:entryValues="@array/bitratesValue"
+            android:key="@string/bitrate_key"
+            android:summary="@string/preference_bit_summary"
+            android:title="@string/preference_bit_title" />
+
+    </com.orpheusdroid.screenrecorder.preferences.MyPreferenceCategory>
+
+    <!--Audio setting-->
+    <com.orpheusdroid.screenrecorder.preferences.MyPreferenceCategory android:title="@string/prefs_category_audio_settings_title">
+        <com.orpheusdroid.screenrecorder.preferences.MyCheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/audiorec_key"
+            android:summary="@string/preference_audio_record_summary"
+            android:title="@string/preference_audio_record_title" />
+    </com.orpheusdroid.screenrecorder.preferences.MyPreferenceCategory>
+
+    <!--Save setting-->
+    <com.orpheusdroid.screenrecorder.preferences.MyPreferenceCategory android:title="@string/prefs_category_save_options_title">
+        <com.orpheusdroid.screenrecorder.preferences.MyListPreference
+            android:defaultValue="yyyyMMdd_hhmmss"
+            android:entries="@array/filename"
+            android:entryValues="@array/filename"
+            android:key="@string/filename_key"
+            android:title="@string/preference_filename_format_title" />
+
+        <com.orpheusdroid.screenrecorder.preferences.MyEditTextPreference
+            android:defaultValue="recording"
+            android:key="@string/fileprefix_key"
+            android:summary="Enter a prefix for the saved file name"
+            android:title="@string/preference_filename_prefix_title" />
+    </com.orpheusdroid.screenrecorder.preferences.MyPreferenceCategory>
+
+    <!--Recording setting-->
+    <com.orpheusdroid.screenrecorder.preferences.MyPreferenceCategory android:title="@string/prefs_category_recording_settings_title">
+        <com.orpheusdroid.screenrecorder.preferences.MyCheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/preference_floating_control_key"
+            android:summary="@string/preference_floating_control_summary"
+            android:title="@string/preference_floating_control_title" />
+
+        <com.orpheusdroid.screenrecorder.preferences.SeekBarPreference
+            android:defaultValue="100"
+            android:key="@string/preference_floating_control_size_key"
+            android:max="200"
+            android:persistent="true"
+            android:summary="@string/preference_floating_control_size_summary"
+            android:text=" DP"
+            android:title="@string/preference_floating_control_size_title" />
+
+        <com.orpheusdroid.screenrecorder.preferences.MyCheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/preference_enable_target_app_key"
+            android:summary="@string/preference_enable_target_app_summary"
+            android:title="@string/preference_enable_target_app_title" />
+
+        <com.orpheusdroid.screenrecorder.preferences.AppPickerPreference
+            android:defaultValue="none"
+            android:dependency="@string/preference_enable_target_app_key"
+            android:key="@string/preference_app_chooser_key"
+            android:summary="@string/preference_app_chooser_summary"
+            android:title="@string/preference_app_chooser_title" />
+
+    </com.orpheusdroid.screenrecorder.preferences.MyPreferenceCategory>
+
+</PreferenceScreen>
